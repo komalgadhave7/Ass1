@@ -1,0 +1,37 @@
+exam@exam-ThinkCentre-M71e:~$ cassandra/bin/cqlsh
+Connected to Test Cluster at 127.0.0.1:9042.
+[cqlsh 5.0.1 | Cassandra 2.1.11 | CQL spec 3.2.1 | Native protocol v3]
+Use HELP for help.
+cqlsh> create keyspace mykeyspace with replication={'class':'SimpleStrategy','replication_factor':1};
+AlreadyExists: Keyspace 'mykeyspace' already exists
+cqlsh> create keyspace komal with replication={'class':'SimpleStrategy','replication_factor':1};
+cqlsh> use komal;
+cqlsh:komal> create table student(roll int primary key,fname text,lname text)
+         ... ;
+cqlsh:komal> insert into student(roll,fname,lname) values(1,'komal','gadhave');
+cqlsh:komal> insert into student(roll,fname,lname) values(2,'sonali','bagle');cqlsh:komal> select *from student;
+
+ roll | fname  | lname
+------+--------+---------
+    1 |  komal | gadhave
+    2 | sonali |   bagle
+
+(2 rows)
+cqlsh:komal> create index on student(lname);
+cqlsh:komal> select * from student where lname='gadhave';
+
+ roll | fname | lname
+------+-------+---------
+    1 | komal | gadhave
+
+(1 rows)
+cqlsh:komal> select * from student where lname='bagle';
+
+ roll | fname  | lname
+------+--------+-------
+    2 | sonali | bagle
+
+(1 rows)
+cqlsh:komal> select * from student where fname='sonali';
+InvalidRequest: code=2200 [Invalid query] message="No secondary indexes on the restricted columns support the provided operators: "
+
